@@ -1,11 +1,153 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Something</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Linked-List Playground</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    Something
+  <header class="topbar glass">
+    <div class="brand">
+      <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 7h6v10H4zM14 7h6v10h-6z" fill="currentColor" opacity="0.2"/>
+        <path d="M10 9h4v6h-4z" fill="currentColor"/>
+      </svg>
+      <span>Linked-List Playground</span>
+    </div>
+
+    <div class="header-actions">
+      <button id="seedBtn" class="btn subtle" title="Seed sample list">Seed</button>
+      <button id="clearBtn" class="btn subtle" title="Clear all">Clear</button>
+
+      <div class="divider"></div>
+
+      <label class="theme-toggle" title="Toggle theme">
+        <input id="themeSwitch" type="checkbox" />
+        <span class="track">
+          <span class="icon sun" aria-hidden="true">
+            <!-- sun -->
+            <svg viewBox="0 0 24 24"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.8 1.42-1.42zm10.48 0l1.79-1.79 1.41 1.41-1.79 1.8-1.41-1.42zM12 4V1h-0v3h0zm0 19v-3h0v3h0zM4 12H1v0h3v0zm19 0h-3v0h3v0zM6.76 19.16l-1.8 1.79-1.41-1.41 1.79-1.8 1.42 1.42zm10.48 0l1.79 1.79 1.41-1.41-1.79-1.8-1.41 1.42zM12 18a6 6 0 110-12 6 6 0 010 12z"/></svg>
+          </span>
+          <span class="icon moon" aria-hidden="true">
+            <!-- moon -->
+            <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+          </span>
+        </span>
+      </label>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- Controls -->
+    <section class="panel glass" aria-label="Controls">
+      <h2>Controls</h2>
+
+      <div class="controls">
+        <div class="row">
+          <input id="valueInput" class="input" type="text" placeholder="Value (e.g., 42)" />
+          <button id="addTailBtn" class="btn">Add to Tail</button>
+        </div>
+
+        <div class="row">
+          <input id="indexInput" class="input" type="number" min="0" placeholder="Index (0-based)" />
+          <input id="insValueInput" class="input" type="text" placeholder="Value to insert" />
+          <button id="insertBtn" class="btn">Insert @ Index</button>
+        </div>
+
+        <div class="row">
+          <input id="remIndexInput" class="input" type="number" min="0" placeholder="Index to remove" />
+          <button id="removeIndexBtn" class="btn warn">Remove @ Index</button>
+        </div>
+
+        <div class="row">
+          <input id="remValueInput" class="input" type="text" placeholder="Value to remove (first match)" />
+          <button id="removeValueBtn" class="btn warn">Remove by Value</button>
+        </div>
+      </div>
+
+      <p class="hint">Tip: Use <b>Seed</b> to quickly populate nodes for reversing.</p>
+    </section>
+
+    <!-- Visualizer -->
+    <section class="panel glass" aria-label="Visualizer">
+      <div class="panel-head">
+        <h2>Visualizer</h2>
+        <div class="legend">
+          <span class="badge prev">prev</span>
+          <span class="badge curr">curr</span>
+          <span class="badge next">next</span>
+        </div>
+      </div>
+
+      <div id="viewport" class="viewport">
+        <!-- Layers -->
+        <svg id="wireLayer" class="wire-layer" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5"
+              markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+              <path d="M0 0 L10 5 L0 10 z"></path>
+            </marker>
+          </defs>
+        </svg>
+        <div id="nodeLayer" class="node-layer"></div>
+        <!-- Pointer badges (positioned absolutely) -->
+        <div id="badge-prev" class="ptr-badge prev">prev</div>
+        <div id="badge-curr" class="ptr-badge curr">curr</div>
+        <div id="badge-next" class="ptr-badge next">next</div>
+      </div>
+    </section>
+
+    <!-- Reverse panel -->
+    <section class="panel glass" aria-label="Reverse In Place">
+      <div class="panel-head">
+        <h2>Reverse In-Place (Step-through)</h2>
+        <div class="actions">
+          <button id="revStartBtn" class="btn">Start</button>
+          <button id="revStepBtn" class="btn subtle">Step</button>
+          <button id="revAutoBtn" class="btn subtle">Auto</button>
+          <button id="revResetBtn" class="btn warn subtle">Reset</button>
+          <label class="speed">
+            Speed
+            <input id="speedRange" type="range" min="250" max="1500" step="50" value="700" />
+          </label>
+        </div>
+      </div>
+
+      <div class="rev-stats">
+        <div>Head: <span id="headVal" class="chip">null</span></div>
+        <div>prev: <span id="prevVal" class="chip">null</span></div>
+        <div>curr: <span id="currVal" class="chip">null</span></div>
+        <div>next: <span id="nextVal" class="chip">null</span></div>
+        <div>Status: <span id="revStatus" class="chip">idle</span></div>
+      </div>
+    </section>
+
+    <!-- Java code panel -->
+    <section class="panel glass code-panel" aria-label="Java code">
+      <h2>Java: Reverse a Singly Linked List (Iterative)</h2>
+
+      <pre id="codeBlock" class="code">
+<span data-line="1">Node reverseInPlace(Node head) {</span>
+<span data-line="2">    Node prev = null;                 // 1</span>
+<span data-line="3">    Node curr = head;                 // 2</span>
+<span data-line="4">    while (curr != null) {            // 3</span>
+<span data-line="5">        Node next = curr.next;        // 4</span>
+<span data-line="6">        curr.next = prev;             // 5</span>
+<span data-line="7">        prev = curr;                  // 6</span>
+<span data-line="8">        curr = next;                  // 7</span>
+<span data-line="9">    }</span>
+<span data-line="10">    return prev;                      // 8</span>
+<span data-line="11">}</span>
+      </pre>
+      <p class="hint">The highlighted lines track the exact step being simulated.</p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>© Linked-List Playground</span>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
