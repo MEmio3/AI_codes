@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Linked-List Playground</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar glass">
+    <div class="brand">
+      <svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true">
+        <path d="M4 7h6v10H4zM14 7h6v10h-6z" fill="currentColor" opacity="0.2"/>
+        <path d="M10 9h4v6h-4z" fill="currentColor"/>
+      </svg>
+      <span>Linked-List Playground</span>
+    </div>
+
+    <nav class="tabs">
+      <a class="tab active" href="#">Singly</a>
+      <a class="tab" href="#">Doubly</a>
+      <a class="tab" href="#">Circular Singly</a>
+      <a class="tab" href="#">Circular Doubly</a>
+      <a class="tab" href="#">Dummy-Headed (S)</a>
+      <a class="tab" href="#">Dummy-Headed (D)</a>
+      <a class="tab" href="#">More…</a>
+    </nav>
+
+    <div class="header-actions">
+      <label class="switch">
+        <input id="stepMode" type="checkbox" checked />
+        <span>Step Mode</span>
+      </label>
+
+      <div class="divider"></div>
+
+      <button id="seedBtn" class="btn subtle" title="Seed sample list">Seed</button>
+      <button id="clearBtn" class="btn subtle" title="Clear all">Clear</button>
+
+      <div class="divider"></div>
+
+      <label class="theme-toggle" title="Toggle theme">
+        <input id="themeSwitch" type="checkbox" />
+        <span class="track">
+          <span class="icon sun" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.8 1.42-1.42zm10.48 0l1.79-1.79 1.41 1.41-1.79 1.8-1.41-1.42zM12 4V1h-0v3h0zm0 19v-3h0v3h0zM4 12H1v0h3v0zm19 0h-3v0h3v0zM6.76 19.16l-1.8 1.79-1.41-1.41 1.79-1.8 1.42 1.42zm10.48 0l1.79 1.79 1.41-1.41-1.79-1.8-1.41 1.42zM12 18a6 6 0 110-12 6 6 0 010 12z"/></svg>
+          </span>
+          <span class="icon moon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+          </span>
+        </span>
+      </label>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- Quick controls -->
+    <section class="panel glass" aria-label="Quick Controls">
+      <div class="panel-head">
+        <h2>Quick Controls (Singly)</h2>
+      </div>
+      <div class="controls">
+        <div class="row">
+          <input id="valueInput" class="input" type="text" placeholder="Value (e.g., 42)" />
+          <button id="addTailBtn" class="btn">Add to Tail</button>
+        </div>
+
+        <div class="row">
+          <input id="indexInput" class="input" type="number" min="0" placeholder="Index (0-based)" />
+          <input id="insValueInput" class="input" type="text" placeholder="Value to insert" />
+          <button id="insertBtn" class="btn">Insert @ Index</button>
+        </div>
+
+        <div class="row">
+          <input id="remIndexInput" class="input" type="number" min="0" placeholder="Index to remove" />
+          <button id="removeIndexBtn" class="btn warn">Remove @ Index</button>
+        </div>
+
+        <div class="row">
+          <input id="remValueInput" class="input" type="text" placeholder="Value to remove (first match)" />
+          <button id="removeValueBtn" class="btn warn">Remove by Value</button>
+        </div>
+
+        <div class="row">
+          <input id="arrayInput" class="input" type="text" placeholder="createFromArray: e.g. 10,20,30,40" />
+          <button id="fromArrayBtn" class="btn">Create from Array</button>
+        </div>
+      </div>
+      <p class="hint">Tip: Turn <b>Step Mode</b> on to watch each line execute with pointers.</p>
+    </section>
+
+    <!-- Visualizer -->
+    <section class="panel glass" aria-label="Visualizer">
+      <div class="panel-head">
+        <h2>Visualizer</h2>
+        <div class="legend">
+          <span class="badge head">HEAD</span>
+          <span class="badge prev">prev</span>
+          <span class="badge curr">curr</span>
+          <span class="badge next">next</span>
+        </div>
+      </div>
+
+      <div id="viewport" class="viewport">
+        <!-- Layers -->
+        <svg id="wireLayer" class="wire-layer" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5"
+              markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+              <path d="M0 0 L10 5 L0 10 z"></path>
+            </marker>
+          </defs>
+        </svg>
+
+        <div id="nodeLayer" class="node-layer"></div>
+
+        <!-- Pointer badges -->
+        <div id="badge-head" class="ptr-badge head">HEAD</div>
+        <div id="badge-prev" class="ptr-badge prev">prev</div>
+        <div id="badge-curr" class="ptr-badge curr">curr</div>
+        <div id="badge-next" class="ptr-badge next">next</div>
+      </div>
+    </section>
+
+    <!-- Method Runner -->
+    <section class="panel glass" aria-label="Method Runner">
+      <div class="panel-head">
+        <h2>Method Runner</h2>
+        <div class="actions">
+          <select id="methodSelect" class="input">
+            <option value="iterate">iterate()</option>
+            <option value="count">count()</option>
+            <option value="indexOf">indexOf(value)</option>
+            <option value="getNode">getNode(index)</option>
+            <option value="update">update(index, value)</option>
+            <option value="search">search(value)</option>
+            <option value="insert">insert(index, value)</option>
+            <option value="removeAt">removeAt(index)</option>
+            <option value="remove">remove(value)</option>
+            <option value="copy">copy()</option>
+            <option value="reverseOutOfPlace">reverseOutOfPlace()</option>
+            <option value="reverseInPlace" selected>reverseInPlace()</option>
+            <option value="rotateLeft">rotateLeft(k)</option>
+            <option value="rotateRight">rotateRight(k)</option>
+          </select>
+
+          <span id="paramArea" class="param-area"></span>
+
+          <button id="runBtn" class="btn">Run</button>
+          <button id="stepBtn" class="btn subtle">Step</button>
+          <button id="autoBtn" class="btn subtle">Auto</button>
+          <button id="resetBtn" class="btn warn subtle">Reset</button>
+
+          <label class="speed">
+            Speed
+            <input id="speedRange" type="range" min="200" max="1500" step="50" value="600" />
+          </label>
+        </div>
+      </div>
+
+      <div class="rev-stats">
+        <div>Head: <span id="headVal" class="chip">null</span></div>
+        <div>prev: <span id="prevVal" class="chip">null</span></div>
+        <div>curr: <span id="currVal" class="chip">null</span></div>
+        <div>next: <span id="nextVal" class="chip">null</span></div>
+        <div>Status: <span id="statusVal" class="chip">idle</span></div>
+      </div>
+    </section>
+
+    <!-- Java code panel -->
+    <section class="panel glass code-panel" aria-label="Java code">
+      <h2 id="codeTitle">Java: reverseInPlace</h2>
+      <pre id="codeBlock" class="code"></pre>
+      <p class="hint">Step Mode highlights the exact line and shows where <b>prev</b>, <b>curr</b>, and <b>next</b> point.</p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <span>© Linked-List Playground</span>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
