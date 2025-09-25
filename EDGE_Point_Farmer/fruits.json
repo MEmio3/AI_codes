@@ -1,0 +1,41 @@
+{
+  "fruits": [
+    "Apple",
+    "Banana",
+    "Orange",
+    "Mango",
+    "Strawberry",
+    "Pineapple",
+    "Watermelon",
+    "Grapes",
+    "Kiwi",
+    "Peach",
+    "Pear",
+    "Cherry",
+    "Plum",
+    "Apricot",
+    "Coconut",
+    "Papaya",
+    "Guava",
+    "Pomegranate",
+    "Lychee",
+    "Dragon Fruit",
+    "Passion Fruit",
+    "Avocado",
+    "Blueberry",
+    "Raspberry",
+    "Blackberry",
+    "Cranberry",
+    "Grapefruit",
+    "Lemon",
+    "Lime",
+    "Tangerine",
+    "Fig",
+    "Date"
+  ],
+  "settings": {
+    "default_delay": 3,
+    "default_browser": "edge",
+    "auto_close_tabs": false
+  }
+}
